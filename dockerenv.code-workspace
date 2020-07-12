@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../lib/stm32-cmake"
+		},
+		{
+			"path": "../lib/STM32CUBEF4"
+		}
+	],
+	"settings": {}
+}
