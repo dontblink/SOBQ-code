@@ -59,9 +59,30 @@ def build_cmake(ctx, build_type):
 def run_interactive(ctx):
     root = os.path.dirname(os.path.abspath(__file__))
     command = 'docker run -it --rm -v \"{}\":/usr/project nirve/armenv:v1'.format(root)
+    run(command)
 
 @task(help={'clean':"prints shit"})
-def build(ctx, clean=False):
-    if clean:
-        print("Cleaning!")
-    print("Building!")
+def build(ctx, build_type):
+    """Builds elf using make"""
+    
+    if build_type.lower() == "all":
+        lst = {"Debug", "Release"}
+    else:
+        if build_type.lower() == "debug" or build_type.lower() == "release":
+            lst = {build_type.lower().capitalize()}
+        else:
+            print("It's Fucked")        
+            return
+
+    for item in lst:
+        print("make as {}".format(item))
+        root = os.path.dirname(os.path.abspath(__file__))
+        
+        # run docker file, change to build folder, remove container on exit
+        # mount project in /usr/project
+        # run cmake for the given build configuration
+        command = ("docker run -w /usr/project/Core/{} --rm".format(item) \
+                + " -v \"{}\":/usr/project nirve/armenv:v1".format(root) \
+                + " make ." )
+        #print(command)
+        run(command)
